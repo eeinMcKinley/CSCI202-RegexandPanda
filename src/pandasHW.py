@@ -1,10 +1,10 @@
 """
-hello.py
+pandasHW.py
 ====================================
-This is an example file with correct docstring examples
+This is the homework that uses pandas and regex to get data on weather of Sioux City and information from that.
 
-| Author: Seth McNeill
-| Date: 2025 September 07
+| Author: Eein McKinley
+| Date: 2026 April 17
 """
 
 class SayHello:

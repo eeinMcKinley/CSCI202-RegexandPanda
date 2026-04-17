@@ -6,10 +6,9 @@
 RegexAndPanda documentation
 ===========================
 
-CHANGE THE NAME OF THE MODULE hello BELOW AFTER YOU CHANGE THE NAME OF hello.py TO MATCH YOUR PROJECT!
-Then you can change these documentation lines
+This is the homework assignment that uses pandas and regex to find weather details in the Sioux City Area.
 
-.. automodule:: hello
+.. automodule:: pandasHW
    :members:
    :undoc-members:
    :show-inheritance:
