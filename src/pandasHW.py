@@ -9,6 +9,7 @@ This is the homework that uses pandas and regex to get data on weather of Sioux 
 
 
 import pandas as pd
+import numpy as np
 from datetime import datetime, UTC
 import re
 import requests
@@ -45,10 +46,28 @@ def collectData():
     print(df)
     #DataFrame manipulation
     pd.to_datetime(df["Time"], format="%H:%M")
-    tempInfo = [df["Temp"].mean(),df["Temp"].std(),df["Temp"].median(),df["Temp"].min(),df["Temp"].max(),df["Temp"].value_counts()]
-    humidInfo = [df["Humidity"].mean(),df["Humidity"].std(),df["Humidity"].median(),df["Humidity"].min(),df["Humidity"].max(),df["Humidity"].value_counts()]
-    pressInfo = [df["Pressure"].mean(),df["Pressure"].std(),df["Pressure"].median(),df["Pressure"].min(),df["Pressure"].max(),df["Pressure"].value_counts()]
-    print(f"{tempInfo}\n{humidInfo}\n{pressInfo}")
+    #Info is orgainzed: [avg,std,median,min,max,frequency]
+    tempInfo = [df["Temp"].mean().item(),df["Temp"].std().item(),df["Temp"].median().item(),df["Temp"].min().item(),df["Temp"].max().item(),df["Temp"].value_counts()]
+    humidInfo = [df["Humidity"].mean().item(),df["Humidity"].std().item(),df["Humidity"].median().item(),df["Humidity"].min().item(),df["Humidity"].max().item(),df["Humidity"].value_counts()]
+    pressInfo = [df["Pressure"].mean().item(),df["Pressure"].std().item(),df["Pressure"].median().item(),df["Pressure"].min().item(),df["Pressure"].max().item(),df["Pressure"].value_counts()]
+    print(f"\tTemp\tHumid\tPressure")
+    for x in range(len(tempInfo)):
+        if x == 0:
+            print("Avg.:",end="")
+        if x == 1:
+            print("St.D.:",end="")
+        if x == 2:
+            print("Median:",end="")
+        if x == 3:
+            print("Min:",end="")
+        if x == 4:
+            print("Max:",end="")
+        if x <= 4:
+            print(f"\t{tempInfo[x]:.2f}\t{humidInfo[x]:.2f}\t{pressInfo[x]:.2f}")
+        else:
+            print(f"\n{tempInfo[x]}\n\n{humidInfo[x]}\n\n{pressInfo[x]}")
+    
+    
 
 def nameNormalizing(name):
     #Name changing shenanagins.
@@ -86,6 +105,6 @@ if __name__ == '__main__':
     """
     Runs if file called as script as opposed to being imported as a library
     """
-    print(collectData())
+    collectData()
 
     
