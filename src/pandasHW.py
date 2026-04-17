@@ -20,9 +20,10 @@ from string import ascii_uppercase as uppercase
 #Useful for making boxplots
 #plt.boxplot(data,vert=True)
 
-def collectData():
+def main():
     """
-    This collects the data from the National Weather Service in the Siouxland area and turns it into a pandas dataframe.
+    This collects the data from the National Weather Service in the Siouxland area 
+    and turns it into a pandas dataframe and shows statistics about the weather.
     """
     #Going online to get weather information
     response = requests.get("https://forecast.weather.gov/obslocal.php?warnzone=IAZ031&local_place=Sioux%20City%20IA&zoneid=CDT&offset=18000")
@@ -50,6 +51,72 @@ def collectData():
     tempInfo = [df["Temp"].mean().item(),df["Temp"].std().item(),df["Temp"].median().item(),df["Temp"].min().item(),df["Temp"].max().item(),df["Temp"].value_counts()]
     humidInfo = [df["Humidity"].mean().item(),df["Humidity"].std().item(),df["Humidity"].median().item(),df["Humidity"].min().item(),df["Humidity"].max().item(),df["Humidity"].value_counts()]
     pressInfo = [df["Pressure"].mean().item(),df["Pressure"].std().item(),df["Pressure"].median().item(),df["Pressure"].min().item(),df["Pressure"].max().item(),df["Pressure"].value_counts()]
+    showStats(tempInfo,humidInfo,pressInfo)
+    
+    
+
+def nameNormalizing(name):
+    """
+    Normalizes names for better use in the data frame
+
+    Parameters
+    ----------
+    name: str
+        The name that is being normalized
+
+    Returns
+    ------------
+    str
+        The normalized name
+    """
+    #Name changing shenanagins.
+    containsLower = False
+    containsUpper = False
+    for letter in lowercase:
+        if letter in name:
+            containsLower = True
+            break
+    for letter in uppercase:
+        if letter in name:
+            containsUpper = True
+            break
+    if not (containsUpper and containsLower):
+        if containsUpper:
+            stationNameWords = name.split()
+            stationName = ""
+            for word in stationNameWords:
+                stationName = word[0] + word[1:].lower()
+            return stationName
+        else:
+            stationNameWords = name.split()
+            stationName = ""
+            for word in stationNameWords:
+                stationName = word[0].upper() + word[1:]
+            return stationName
+    elif name != "Spencer Municipal Airport":
+        return name
+    else:
+        #Had to Hard Code this one or else my sanity would be tested
+        return "Spencer"
+        
+def showStats(tempInfo,humidInfo,pressInfo):
+    """
+    Prints statistics about the weather in the Siouxland area in the terminal
+
+    Parameters
+    -----------
+    tempInfo : list
+        Statistics regarding the temperature that are displayed
+
+    -----------
+    humidInfo : list
+        Statistics regarding the humidity that are displayed
+
+    -----------
+    pressInfo : list
+        Statistics regarding the pressure that are displayed    
+
+    """
     print(f"\tTemp\tHumid\tPressure")
     for x in range(len(tempInfo)):
         if x == 0:
@@ -66,45 +133,11 @@ def collectData():
             print(f"\t{tempInfo[x]:.2f}\t{humidInfo[x]:.2f}\t{pressInfo[x]:.2f}")
         else:
             print(f"\n{tempInfo[x]}\n\n{humidInfo[x]}\n\n{pressInfo[x]}")
-    
-    
-
-def nameNormalizing(name):
-    #Name changing shenanagins.
-        containsLower = False
-        containsUpper = False
-        for letter in lowercase:
-            if letter in name:
-                containsLower = True
-                break
-        for letter in uppercase:
-            if letter in name:
-                containsUpper = True
-                break
-        if not (containsUpper and containsLower):
-            if containsUpper:
-                stationNameWords = name.split()
-                stationName = ""
-                for word in stationNameWords:
-                    stationName = word[0] + word[1:].lower()
-                return stationName
-            else:
-                stationNameWords = name.split()
-                stationName = ""
-                for word in stationNameWords:
-                    stationName = word[0].upper() + word[1:]
-                return stationName
-        elif name != "Spencer Municipal Airport":
-            return name
-        else:
-            #Had to Hard Code this one or else my sanity would be tested
-            return "Spencer"
-
 
 if __name__ == '__main__':
     """
     Runs if file called as script as opposed to being imported as a library
     """
-    collectData()
+    main()
 
     
