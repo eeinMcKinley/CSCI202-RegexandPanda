@@ -17,8 +17,6 @@ import string
 import matplotlib.pyplot as plt
 from string import ascii_lowercase as lowercase
 from string import ascii_uppercase as uppercase
-#Useful for making boxplots
-#plt.boxplot(data,vert=True)
 
 def main():
     """
@@ -52,6 +50,18 @@ def main():
     humidInfo = [df["Humidity"].mean().item(),df["Humidity"].std().item(),df["Humidity"].median().item(),df["Humidity"].min().item(),df["Humidity"].max().item(),df["Humidity"].value_counts()]
     pressInfo = [df["Pressure"].mean().item(),df["Pressure"].std().item(),df["Pressure"].median().item(),df["Pressure"].min().item(),df["Pressure"].max().item(),df["Pressure"].value_counts()]
     showStats(tempInfo,humidInfo,pressInfo)
+    ax1 = plt.subplot(3,1,1)
+    ax2 = plt.subplot(3,1,2)
+    ax3 = plt.subplot(3,1,3)
+    ax1.boxplot(df["Temp"],orientation="horizontal")
+    ax1.set_title("Weather Statistics from Weather Stations around Siouxland")
+    ax1.set_xlabel("Temperature at Each Station (°F)")
+    ax2.boxplot(df["Humidity"],orientation="horizontal")
+    ax2.set_xlabel("Humidity at Each Station (%)")
+    ax3.boxplot(df["Pressure"],orientation="horizontal")
+    ax3.set_xlabel("Pressure at Each Station (in)")
+    plt.tight_layout()
+    plt.show()
     
     
 
