@@ -9,6 +9,7 @@ This is the homework that uses pandas and regex to get data on weather of Sioux 
 
 
 import pandas as pd
+from datetime import datetime, UTC
 import re
 import requests
 import string
@@ -33,43 +34,53 @@ def collectData():
     stationDict = {"Kname":[],"Name":[],"Time":[],"Temp":[],"Humidity":[],"Pressure":[]}
     for station in stationsInfo:
         stationDict["Kname"].append(station[0])
-        #Name changing shenanagins.
+        stationDict["Name"].append(nameNormalizing(station[1]))
+        #The final details regarding the dictionary
+        stationDict["Time"].append((station[2]))
+        stationDict["Temp"].append(float(station[3]))
+        stationDict["Humidity"].append(float(station[4]))
+        stationDict["Pressure"].append(float(station[5]))
+    #Creation of dictionary
+    df = pd.DataFrame(stationDict)
+    print(df)
+    #DataFrame manipulation
+    pd.to_datetime(df["Time"], format="%H:%M")
+    tempInfo = [df["Temp"].mean(),df["Temp"].std(),df["Temp"].median(),df["Temp"].min(),df["Temp"].max(),df["Temp"].value_counts()]
+    humidInfo = [df["Humidity"].mean(),df["Humidity"].std(),df["Humidity"].median(),df["Humidity"].min(),df["Humidity"].max(),df["Humidity"].value_counts()]
+    pressInfo = [df["Pressure"].mean(),df["Pressure"].std(),df["Pressure"].median(),df["Pressure"].min(),df["Pressure"].max(),df["Pressure"].value_counts()]
+    print(f"{tempInfo}\n{humidInfo}\n{pressInfo}")
+
+def nameNormalizing(name):
+    #Name changing shenanagins.
         containsLower = False
         containsUpper = False
         for letter in lowercase:
-            if letter in station[1]:
+            if letter in name:
                 containsLower = True
                 break
         for letter in uppercase:
-            if letter in station[1]:
+            if letter in name:
                 containsUpper = True
                 break
         if not (containsUpper and containsLower):
             if containsUpper:
-                stationNameWords = station[1].split()
+                stationNameWords = name.split()
                 stationName = ""
                 for word in stationNameWords:
                     stationName = word[0] + word[1:].lower()
-                stationDict["Name"].append(stationName)
+                return stationName
             else:
-                stationNameWords = station[1].split()
+                stationNameWords = name.split()
                 stationName = ""
                 for word in stationNameWords:
                     stationName = word[0].upper() + word[1:]
-                stationDict["Name"].append(stationName)
-        elif station[1] != "Spencer Municipal Airport":
-            stationDict["Name"].append(station[1])
+                return stationName
+        elif name != "Spencer Municipal Airport":
+            return name
         else:
             #Had to Hard Code this one or else my sanity would be tested
-            stationDict["Name"].append("Spencer")
-        #The final details regarding the dictionary
-        stationDict["Time"].append(station[2])
-        stationDict["Temp"].append(station[3])
-        stationDict["Humidity"].append(station[4])
-        stationDict["Pressure"].append(station[5])
-    #Creation of dictionary
-    df = pd.DataFrame(stationDict)
-    print(df)
+            return "Spencer"
+
 
 if __name__ == '__main__':
     """
