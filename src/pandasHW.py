@@ -118,11 +118,9 @@ def showStats(tempInfo,humidInfo,pressInfo):
     tempInfo : list
         Statistics regarding the temperature that are displayed
 
-    -----------
     humidInfo : list
         Statistics regarding the humidity that are displayed
 
-    -----------
     pressInfo : list
         Statistics regarding the pressure that are displayed    
 
